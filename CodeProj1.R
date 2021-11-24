@@ -1,12 +1,5 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+##Code for reading in the dataset and/or processing the data
 
-
-## Loading and preprocessing the data
 setwd("~/Desktop/RepDataProj1")
 activity<-read.csv("activity.csv")
 
@@ -44,8 +37,8 @@ qplot(Q2$`Total Steps`,geom="histogram",xlab="Total Steps",ylab="Counts",main="T
 dev.off()
 
 
+##Mean and median number of steps taken each day
 
-## What is mean total number of steps taken per day?
 library(dplyr)
 Q3<-data.frame(round(tapply(activity$steps,activity$date,mean,na.rm=TRUE),2))
 Q3$date<-rownames(Q3)
@@ -57,7 +50,6 @@ Q3$median<-temp$`Median Steps`
 Q3<-Q3 %>% select(date,`Mean Steps`,median)
 
 
-## What is the average daily activity pattern?
 ##Time series plot of the average number of steps taken
 
 Q4<-Q3
@@ -74,8 +66,6 @@ activity$interval<-factor(activity$interval)
 Q5<-aggregate(data=activity,steps~date+interval,FUN="mean")
 Q5<-aggregate(data=Q5,steps~interval,FUN="max")
 
-
-## Imputing missing values
 ##Code to describe and show a strategy for imputing missing data 
 
 Q6<-activity
@@ -115,13 +105,9 @@ for (i in 1:dim(Q6.6)[[1]]){
         if(is.na(Q6.6[i,3])){Q6.6[i,6]=Q6.6[i,5]}
         else {Q6.6[i,6]=Q6.6[i,3]}
 }
-
 #Now simplify the imputed analytical data frame
 Q6.6 <-Q6.6  %>% select(date,weekday,interval,Steps.Updated)
 names(Q6.6)[[4]]<-"Steps"
-
-
-## Are there differences in activity patterns between weekdays and weekends?
 
 
 ##Histogram of the total number of steps taken each day after missing values are imputed
